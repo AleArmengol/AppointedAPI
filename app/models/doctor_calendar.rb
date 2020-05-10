@@ -1,0 +1,2 @@
+class DoctorCalendar < ApplicationRecord
+end
