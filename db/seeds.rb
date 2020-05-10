@@ -7,17 +7,17 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-   #Generate 5 Patients
-# 5.times do
-#     Patient.create({
-#         name: Faker::Name.first_name,
-#         last_name: Faker::Name.last_name,
-#         payment_uptodate: Faker::Boolean.boolean,
-#         phone_number: Faker::PhoneNumber.cell_phone,
-#         email: Faker::Internet.free_email,
-#         address: Faker:: Address.street_address
-#     })
-# end
+    # Generate 5 Patients
+5.times do
+    Patient.create({
+        name: Faker::Name.first_name,
+        last_name: Faker::Name.last_name,
+        payment_uptodate: Faker::Boolean.boolean,
+        phone_number: Faker::PhoneNumber.cell_phone,
+        email: Faker::Internet.free_email,
+        address: Faker:: Address.street_address
+    })
+end
 
     #Generate 5 Patients
 5.times do

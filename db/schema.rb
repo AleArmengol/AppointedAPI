@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_09_213656) do
+ActiveRecord::Schema.define(version: 2020_05_10_193902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "doctor_specialities", force: :cascade do |t|
+    t.bigint "doctor_id", null: false
+    t.bigint "speciality_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["doctor_id"], name: "index_doctor_specialities_on_doctor_id"
+    t.index ["speciality_id"], name: "index_doctor_specialities_on_speciality_id"
+  end
 
   create_table "doctors", force: :cascade do |t|
     t.string "name"
@@ -23,11 +32,6 @@ ActiveRecord::Schema.define(version: 2020_05_09_213656) do
     t.string "address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "doctors_specialties", id: false, force: :cascade do |t|
-    t.bigint "doctor_id", null: false
-    t.bigint "specialty_id", null: false
   end
 
   create_table "patients", force: :cascade do |t|
@@ -41,10 +45,12 @@ ActiveRecord::Schema.define(version: 2020_05_09_213656) do
     t.boolean "payment_uptodate"
   end
 
-  create_table "specialties", force: :cascade do |t|
+  create_table "specialities", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "doctor_specialities", "doctors"
+  add_foreign_key "doctor_specialities", "specialities"
 end

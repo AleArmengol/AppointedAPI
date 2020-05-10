@@ -16,7 +16,7 @@ development:
   adapter: postgresql
   encoding: UTF-8
   host: localhost
-  database: appointeddb
+  database: appointed_dev
   pool: 5
   username: aearmengol
   password: alexis1398
@@ -43,7 +43,7 @@ test:
   adapter: postgresql
   encoding: UTF-8
   host: localhost
-  database: appointeddb
+  database: appointed_test
   pool: 5
   username: aearmengol
   password: alexis1398
@@ -52,7 +52,7 @@ production:
   adapter: postgresql
   encoding: UTF-8
   host: localhost
-  database: appointeddb
+  database: appointed_prod
   pool: 5
   username: aearmengol
   password: alexis1398
