@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  resources :weekly_preset_daily_presets
+  resources :weekly_presets
+  resources :time_frames
+  resources :daily_presets
   root "specialities#index"
   resources :specialities
   resources :doctors
