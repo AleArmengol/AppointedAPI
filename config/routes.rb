@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
+<<<<<<< HEAD
   resources :doctor_calendars
+=======
+>>>>>>> e195d1a94fc2f6c2c7cacb64122958fea26a6b73
   root "specialities#index"
   resources :specialities
   resources :doctors
