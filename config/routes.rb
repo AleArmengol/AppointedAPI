@@ -1,12 +1,7 @@
 Rails.application.routes.draw do
-
-  root "specialities#index"
+  resources :waiting_lists
   resources :specialities
   resources :doctors
+  root "doctors#index"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  namespace 'api' do
-    namespace 'v1' do
-      resources :users
-    end
-  end
 end

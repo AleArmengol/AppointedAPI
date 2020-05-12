@@ -1,3 +1,3 @@
 class TimeFrame < ApplicationRecord
-  belongs_to :daily_preset
+    belongs_to :daily_preset
 end
