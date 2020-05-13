@@ -38,15 +38,14 @@ Doctor.all.each do |doctor|
     end_at = start_at + 30.minutes
 
     (1..8).each do |index|
-        puts "starting loop"
+        #find necesary fields
         doctor_speciality_id = DoctorSpeciality.where(doctor_id: d_id)[0].speciality_id
-        puts "after dsi"
-        puts d_id
         doctor_speciality_name = Speciality.where(id: doctor_speciality_id)[0].name
-        puts "after dsn"
-        doctor.appointments.create(start_time: start_at, end_time: end_at, doctor_name: doctor.name + ' ' + doctor.last_name, speciality_name: doctor_speciality_name)
-        puts "after dac"
 
+        #add to appointments table
+        doctor.appointments.create(start_time: start_at, end_time: end_at, doctor_name: doctor.name + ' ' + doctor.last_name, speciality_name: doctor_speciality_name)
+
+        #update time
         start_at = end_at
         end_at = start_at + 30.minutes
     end
