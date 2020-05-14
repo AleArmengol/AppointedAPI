@@ -44,3 +44,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 #Postgres
 gem 'pg'
+
+#hirb (pretty console output)
+gem 'hirb'
