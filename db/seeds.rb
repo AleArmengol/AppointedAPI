@@ -38,7 +38,7 @@ Doctor.all.each do |doctor|
     end_at = start_at + 30.minutes
 
     (1..8).each do |index|
-        #find necesary fields
+        #find necessary fields
         doctor_speciality_id = DoctorSpeciality.where(doctor_id: d_id)[0].speciality_id
         doctor_speciality_name = Speciality.where(id: doctor_speciality_id)[0].name
 
