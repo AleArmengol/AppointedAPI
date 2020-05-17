@@ -1,51 +1,69 @@
 class AppointmentsController < ApplicationController
-  before_action :set_appointment, only: [:show, :update, :destroy]
+  # before_action :set_appointment, only: [:show, :update, :destroy, :index]
 
   # GET /appointments
-  def index
-    @appointments = Appointment.all
+  # def index
+  #   @appointments = Appointment.all
 
-    render json: @appointments
-  end
+  #   render json: @appointments
+  # end
+  
+  # patient_id
+  # status => booked, cancelled or available
 
-  # GET /appointments/1
   def show
-    render json: @appointment
+    patient = Patient.find(params[:patient_id])
+    
+    appointments  = case params[:status]
+                      when 'booked'
+                        patient.appointments.booked
+                      when 'cancelled'
+                        patient.appointments.cancelled
+                      when 'past'
+                        patient.appointments.past
+                      end 
+
+    render json: appointments
   end
 
-  # POST /appointments
-  def create
-    @appointment = Appointment.new(appointment_params)
+  # # GET /appointments/1
+  # def show
+  #   render json: @appointment
+  # end
 
-    if @appointment.save
-      render json: @appointment, status: :created, location: @appointment
-    else
-      render json: @appointment.errors, status: :unprocessable_entity
-    end
-  end
+  # # POST /appointments
+  # def create
+  #   @appointment = Appointment.new(appointment_params)
 
-  # PATCH/PUT /appointments/1
-  def update
-    if @appointment.update(appointment_params)
-      render json: @appointment
-    else
-      render json: @appointment.errors, status: :unprocessable_entity
-    end
-  end
+  #   if @appointment.save
+  #     render json: @appointment, status: :created, location: @appointment
+  #   else
+  #     render json: @appointment.errors, status: :unprocessable_entity
+  #   end
+  # end
 
-  # DELETE /appointments/1
-  def destroy
-    @appointment.destroy
-  end
+  # # PATCH/PUT /appointments/1
+  # def update
+  #   if @appointment.update(appointment_params)
+  #     render json: @appointment
+  #   else
+  #     render json: @appointment.errors, status: :unprocessable_entity
+  #   end
+  # end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_appointment
-      @appointment = Appointment.find(params[:id])
-    end
+  # # DELETE /appointments/1
+  # def destroy
+  #   @appointment.destroy
+  # end
 
-    # Only allow a trusted parameter "white list" through.
-    def appointment_params
-      params.require(:appointment).permit(:doctor_id, :patient_id, :speciality_name, :name, :status, :end_time, :start_time, :doctor_name, :patient_name, :length, :date)
-    end
+  # private
+  #   # Use callbacks to share common setup or constraints between actions.
+  #   def set_appointment
+  #     @appointment = Appointment.find(params[:id])
+  #   end
+
+  #   # Only allow a trusted parameter "white list" through.
+  #   def appointment_params
+  #     params.require(:appointment).permit(:doctor_id, :patient_id, :speciality_name, :name, :status, :end_time, :start_time, :doctor_name, :patient_name, :length, :date)
+  #   end
 end

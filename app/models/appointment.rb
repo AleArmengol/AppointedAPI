@@ -2,5 +2,5 @@ class Appointment < ApplicationRecord
   belongs_to :doctor
   belongs_to :patient, optional: true
 
-  enum status: [:available, :booked, :confirmed, :cancelled]
+  enum status: [:available, :booked, :confirmed, :cancelled, :past]
 end
