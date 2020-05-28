@@ -10,7 +10,7 @@ class DoctorsController < ApplicationController
 
   # GET /doctors/1
   def show
-    if params[:id] == '0' or params[:id] == nil
+    if params[:id] == '0'
       @doctor = Doctor.find_by(email: params[:email])
     end
     render json: @doctor
