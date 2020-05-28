@@ -11,7 +11,7 @@ class AppointmentsController < ApplicationController
   # patient_id
   # status => booked, cancelled or available
 
-  def show
+  def index
     patient = Patient.find(params[:patient_id])
     
     appointments  = case params[:status]
@@ -26,9 +26,12 @@ class AppointmentsController < ApplicationController
     render json: appointments
   end
 
-  # # GET /appointments/1
+  
+
+  # GET /appointments/1
   # def show
-  #   render json: @appointment
+  #   appointment = Appointment.find_by(params[:id])
+  #   render json: appointment
   # end
 
   # # POST /appointments
@@ -51,6 +54,22 @@ class AppointmentsController < ApplicationController
   #   end
   # end
 
+  def update
+    appointment = Appointment.find_by(params[:id])
+  #   if appointment.booked
+  #     appointment.update(status:3)
+  #   end
+  # elsif appointment.available
+  #    appointment.update(status:1)
+    case appointment.status
+                    when 'booked'
+                      appointment.update(status:3)
+                    when 'available'
+                      appointment.update(status:1)
+    end 
+    
+    render json: appointment
+  end
   # # DELETE /appointments/1
   # def destroy
   #   @appointment.destroy
