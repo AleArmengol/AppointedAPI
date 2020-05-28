@@ -1,5 +1,5 @@
 class DoctorsController < ApplicationController
-  before_action :set_doctor, only: [:show, :update, :destroy]
+  before_action :set_doctor, only: [:update, :destroy]
 
   # GET /doctors
   def index
@@ -10,6 +10,9 @@ class DoctorsController < ApplicationController
 
   # GET /doctors/1
   def show
+    if params[:id] == '0'
+      @doctor = Doctor.find_by(email: params[:email])
+    end
     render json: @doctor
   end
 
