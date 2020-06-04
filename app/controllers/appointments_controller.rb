@@ -56,11 +56,6 @@ class AppointmentsController < ApplicationController
 
   def update
     appointment = Appointment.find_by(params[:id])
-  #   if appointment.booked
-  #     appointment.update(status:3)
-  #   end
-  # elsif appointment.available
-  #    appointment.update(status:1)
     case appointment.status
                     when 'booked'
                       appointment.update(status:3)
