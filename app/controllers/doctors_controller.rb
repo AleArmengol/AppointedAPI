@@ -3,23 +3,13 @@ class DoctorsController < ApplicationController
 
   # GET /doctors
   def index
-    # doctor_specialities = DoctorSpeciality.find(params[:speciality_id])
-    # doctors_specialities_id = doctor_specialities.doctor_id
-    # doctors_found = Doctor.find(doctors_specialities_id.doctor_id)
-    # doctors_names = doctors_found.last_name
-    ds = DoctorSpeciality.where(speciality_id: params[:speciality_id])
-    did = ds.select(:doctor_id)
-    doctors = Doctor.where(id: did)
-    
-    render json: doctors
-
-    # render json: @doctors
+    render json: Speciality.find(params[:id]).doctors
   end
 
-  # GET /doctors/1
-  # def show
-  #   render json: @doctor
-  # end
+  GET /doctors/1
+  def show
+    render json: @doctor
+  end
 
   # POST /doctors
   # def create
