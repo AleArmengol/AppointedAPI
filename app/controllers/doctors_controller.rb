@@ -6,7 +6,7 @@ class DoctorsController < ApplicationController
     render json: Speciality.find(params[:id]).doctors
   end
 
-  GET /doctors/1
+  # GET /doctors/1
   def show
     render json: @doctor
   end
