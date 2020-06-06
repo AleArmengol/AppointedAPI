@@ -32,7 +32,7 @@
 
 ##Generate 10
 Doctor.all.each do |doctor|
-    start_at = DateTime.parse('Sun, 24 May 2020 08:00:00 -0300')
+    start_at = DateTime.parse('Sun, 10 Jun 2020 08:00:00 -0300')
     d_id = doctor.id
     start_at = start_at + d_id.day
     end_at = start_at + 30.minutes

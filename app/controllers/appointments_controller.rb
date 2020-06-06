@@ -29,10 +29,17 @@ class AppointmentsController < ApplicationController
   
 
   # GET /appointments/1
-  # def show
-  #   appointment = Appointment.find_by(params[:id])
-  #   render json: appointment
-  # end
+  def show
+    if params[:id] == '0'
+      doctor_id = params[:doctor_id]
+      speciality_name = params[:speciality_name]
+      day = params[:day]
+      month = params[:month]
+      year = params[:year]
+      appointment = Appointment.where(doctor_id: doctor_id).where(speciality_name: speciality_name).where('extract(day from start_time) = ?', day).where('extract(month from start_time) = ?', month).where('extract(year from start_time) = ?', year)
+    end
+    render json: appointment
+  end
 
   # # POST /appointments
   # def create
