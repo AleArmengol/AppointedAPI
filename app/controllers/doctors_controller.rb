@@ -3,7 +3,22 @@ class DoctorsController < ApplicationController
 
   # GET /doctors
   def index
-    render json: Speciality.find(params[:id]).doctors
+    speciality_id = params[:id] #mandatory
+    day = params[:day] #not mandatory
+    month = params[:month] #not mandatory
+    year = params[:year] #not mandatory
+    hour = params[:hour] #not mandatory
+    min = params[:min] #not mandatory
+    doctors = Speciality.find(speciality_id).doctors #filter only by speciality
+    if (day == nil|| month == nil|| year == nil) && (hour == nil || min == nil) #filter only by speciality
+      render json: doctors
+    elsif (day != nil && month != nil && year != nil) && (hour == nil || min == nil)#filter by speciality and date
+      doctors = Appointment.where(doctor_id: doctors.select(:id)).where('extract(day from start_time) = ?', day).where('extract(month from start_time) = ?', month).where('extract(year from start_time) = ?', year).map(&:doctor).uniq.compact
+      render json: doctors
+    end
+
+
+    
   end
 
   # GET /doctors/1
