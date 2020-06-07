@@ -61,17 +61,22 @@ class AppointmentsController < ApplicationController
   #   end
   # end
 
+  
   def update
-    appointment = Appointment.find_by(params[:id])
+    patientId=params[:patient_id]
+    patientName= params[:patient_name]
+    appointment = Appointment.find(params[:id])
+    
     case appointment.status
                     when 'booked'
-                      appointment.update(status:3)
+                      appointment.cancelled!
                     when 'available'
-                      appointment.update(status:1)
-    end 
-    
-    render json: appointment
-  end
+                      appointment.booked!
+                      appointment.update(patient_id: patientId)
+                      appointment.update(patient_name: patientName)
+                    end
+  render json: appointment
+end
   # # DELETE /appointments/1
   # def destroy
   #   @appointment.destroy
