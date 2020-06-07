@@ -36,9 +36,9 @@ class AppointmentsController < ApplicationController
       day = params[:day]
       month = params[:month]
       year = params[:year]
-      appointment = Appointment.available.where(doctor_id: doctor_id).where(speciality_name: speciality_name).where('extract(day from start_time) = ?', day).where('extract(month from start_time) = ?', month).where('extract(year from start_time) = ?', year)
+      appointments = Appointment.available.where(doctor_id: doctor_id).where(speciality_name: speciality_name).where('extract(day from start_time) = ?', day).where('extract(month from start_time) = ?', month).where('extract(year from start_time) = ?', year)
     end
-    render json: appointment
+    render json: appointments
   end
 
   # # POST /appointments

@@ -7,10 +7,12 @@ class DoctorsController < ApplicationController
     day = params[:day] #not mandatory
     month = params[:month] #not mandatory
     speciality_name = Speciality.find(speciality_id).name
-    # year = params[:year] #not mandatory
+    year = params[:year] #not mandatory
     # hour = params[:hour] #not mandatory
     # min = params[:min] #not mandatory
-    doctors = Doctor.joins(:appointments).where(appointments: {speciality_name:speciality_name}).where(appointments: {status: 0}).uniq #filter only by speciality
+    doctors = Doctor.where(id: Appointment.available.where(speciality_name: speciality_name).select(:doctor_id))
+
+    #doctors = Doctor.joins(:appointments).where(appointments: {speciality_name:speciality_name}).where(appointments: {status: 0}).distinct #filter only by speciality
     if (day == nil|| month == nil|| year == nil) #filter only by speciality
       render json: doctors
     elsif (day != nil && month != nil && year != nil) #filter by speciality and date
