@@ -26,6 +26,20 @@ class AppointmentsController < ApplicationController
     render json: appointments
   end
 
+
+  def doctors_appointments_by_day
+
+    year =  params[:year].to_i
+    month =  params[:month].to_i
+    day =  params[:day].to_i
+    appointments = Doctor.find(params[:doctor_id]).appointments.where('DATE(start_time) = ?', Date.new(year, month, day))
+    render json: appointments.where(status: [:available, :booked])
+  end
+
+  def cancelled_appointments_by_doctor
+    render json: Doctor.find(params[:doctor_id]).appointments.cancelled
+  end
+
   
 
   # GET /appointments/1
