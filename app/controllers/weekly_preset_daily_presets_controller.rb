@@ -3,7 +3,9 @@ class WeeklyPresetDailyPresetsController < ApplicationController
 
   # GET /weekly_preset_daily_presets
   def index
-    render json: WeeklyPreset.find(params[:doctor_id])
+    @weekly_preset_daily_presets = WeeklyPresetDailyPreset.all
+
+    render json: @weekly_preset_daily_presets
   end
 
   # GET /weekly_preset_daily_presets/1
