@@ -26,6 +26,18 @@ class AppointmentsController < ApplicationController
     render json: appointments
   end
 
+  def doctors_appointments_by_day
+
+    year =  params[:year].to_i
+    month =  params[:month].to_i
+    day =  params[:day].to_i
+    appointments = Doctor.find(params[:doctor_id]).appointments.where('DATE(start_time) = ?', Date.new(year, month, day))
+    render json: appointments.where(status: [:available, :booked])
+  end
+
+  def cancelled_appointments_by_doctor
+    render json: Doctor.find(params[:doctor_id]).appointments.cancelled
+  end
 
 
   # GET /appointments/1
@@ -36,9 +48,9 @@ class AppointmentsController < ApplicationController
       day = params[:day]
       month = params[:month]
       year = params[:year]
-      appointment = Appointment.where(doctor_id: doctor_id).where(speciality_name: speciality_name).where('extract(day from start_time) = ?', day).where('extract(month from start_time) = ?', month).where('extract(year from start_time) = ?', year)
+      appointments = Appointment.available.where(doctor_id: doctor_id).where(speciality_name: speciality_name).where('extract(day from start_time) = ?', day).where('extract(month from start_time) = ?', month).where('extract(year from start_time) = ?', year)
     end
-    render json: appointment
+    render json: appointments
   end
 
   # POST /appointments
@@ -111,17 +123,28 @@ class AppointmentsController < ApplicationController
   #   end
   # end
 
+  
   def update
-    appointment = Appointment.find_by(params[:id])
+    patientId=params[:patient_id]
+    patientName= params[:patient_name]
+    appointment = Appointment.find(params[:id])
+    
     case appointment.status
                     when 'booked'
-                      appointment.update(status:3)
+                      appointment.cancelled!
                     when 'available'
                       appointment.update(status:1)
     end
 
     render json: appointment
   end
+                      appointment.booked!
+                      appointment.update(patient_id: patientId)
+                      appointment.update(patient_name: patientName)
+                    end
+  render json: appointment
+end
+
   # # DELETE /appointments/1
   # def destroy
   #   @appointment.destroy

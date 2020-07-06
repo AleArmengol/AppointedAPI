@@ -6,13 +6,16 @@ class DoctorsController < ApplicationController
     speciality_id = params[:id] #mandatory
     day = params[:day] #not mandatory
     month = params[:month] #not mandatory
+    speciality_name = Speciality.find(speciality_id).name
     year = params[:year] #not mandatory
-    hour = params[:hour] #not mandatory
-    min = params[:min] #not mandatory
-    doctors = Doctor.joins(:appointments).where(appointments: {speciality_name:'Cardiología'}).where(appointments: {status: 0}).uniq #filter only by speciality
-    if (day == nil|| month == nil|| year == nil) && (hour == nil || min == nil) #filter only by speciality
+    # hour = params[:hour] #not mandatory
+    # min = params[:min] #not mandatory
+    doctors = Doctor.where(id: Appointment.available.where(speciality_name: speciality_name).select(:doctor_id))
+
+    #doctors = Doctor.joins(:appointments).where(appointments: {speciality_name:speciality_name}).where(appointments: {status: 0}).distinct #filter only by speciality
+    if (day == nil|| month == nil|| year == nil) #filter only by speciality
       render json: doctors
-    elsif (day != nil && month != nil && year != nil) && (hour == nil || min == nil)#filter by speciality and date
+    elsif (day != nil && month != nil && year != nil) #filter by speciality and date
       doctors = Appointment.where(doctor_id: doctors.select(:id)).where('extract(day from start_time) = ?', day).where('extract(month from start_time) = ?', month).where('extract(year from start_time) = ?', year).map(&:doctor).uniq.compact
       render json: doctors
     end
@@ -23,6 +26,8 @@ class DoctorsController < ApplicationController
 
   # GET /doctors/1
   def show
+    if params[:id] == '0'
+      @doctor = Doctor.find_by(email: params[:email])
     if params[:id] == '0'
       @doctor = Doctor.find_by(email: params[:email])
     end

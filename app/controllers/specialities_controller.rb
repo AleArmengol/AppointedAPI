@@ -2,10 +2,18 @@ class SpecialitiesController < ApplicationController
   before_action :set_speciality, only: [:show, :update, :destroy]
 
   # GET /specialities
-  def index
-    @specialities = Speciality.all
+  # def index
+  #   @specialities = Speciality.all
 
-    render json: @specialities
+  #   render json: @specialities
+  # end
+
+  def index
+    specialities = Speciality.all
+    if params[:doctor_id]
+      specialities = Doctor.find(params[:doctor_id]).specialities
+    end
+    render json: specialities
   end
 
   # GET /specialities/1
