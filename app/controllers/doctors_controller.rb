@@ -26,10 +26,10 @@ class DoctorsController < ApplicationController
 
   # GET /doctors/1
   def show
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     if params[:id] == '0'
       @doctor = Doctor.find_by(email: params[:email])
-      print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+    if params[:id] == '0'
+      @doctor = Doctor.find_by(email: params[:email])
     end
     render json: @doctor
   end

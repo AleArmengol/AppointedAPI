@@ -3,7 +3,8 @@ class DailyPresetsController < ApplicationController
 
   # GET /daily_presets
   def index
-    render json: Doctor.find(params[:doctor_id]).daily_presets
+    presets = DailyPreset.where(doctor_id: params[:doctor_id])
+    render json: presets
   end
 
   # GET /daily_presets/1

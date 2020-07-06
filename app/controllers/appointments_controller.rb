@@ -7,13 +7,13 @@ class AppointmentsController < ApplicationController
 
   #   render json: @appointments
   # end
-  
+
   # patient_id
   # status => booked, cancelled or available
 
   def index
     patient = Patient.find(params[:patient_id])
-    
+
     appointments  = case params[:status]
                       when 'booked'
                         patient.appointments.booked
@@ -21,11 +21,10 @@ class AppointmentsController < ApplicationController
                         patient.appointments.cancelled
                       when 'past'
                         patient.appointments.past
-                      end 
+                      end
 
     render json: appointments
   end
-
 
   def doctors_appointments_by_day
 
@@ -40,7 +39,6 @@ class AppointmentsController < ApplicationController
     render json: Doctor.find(params[:doctor_id]).appointments.cancelled
   end
 
-  
 
   # GET /appointments/1
   def show
@@ -55,16 +53,66 @@ class AppointmentsController < ApplicationController
     render json: appointments
   end
 
-  # # POST /appointments
-  # def create
-  #   @appointment = Appointment.new(appointment_params)
+  # POST /appointments
+  def create
+    p = params.to_unsafe_h.slice(:weekly_preset_id, :dates_to_set)
+    dates = p[:dates_to_set]
+    weekly_preset = WeeklyPreset.find(params[:weekly_preset_id])
+    doctor = weekly_preset.doctor
+    count = 0
+    dates.each do |date|
+      daily_preset = WeeklyPresetDailyPreset.where(day:date[:name], weekly_preset_id: weekly_preset.id)
+      if daily_preset.length > 0
+        daily_preset = daily_preset.last.daily_preset
+        status = set_daily_preset_to_date(date, daily_preset) #return the number of appointments created or 'ERROR' if there's any booked or confirmed appointment on that day
+        if status == "ERROR"
+          print date[:name]
+        else
+          count += 1
+        end
+      end
+    end
+    render json: "OK"
+  end
 
-  #   if @appointment.save
-  #     render json: @appointment, status: :created, location: @appointment
-  #   else
-  #     render json: @appointment.errors, status: :unprocessable_entity
-  #   end
-  # end
+  def set_daily_preset_to_dates()
+    p = params.to_unsafe_h.slice(:daily_preset_id, :dates_to_set)
+    dates = p[:dates_to_set]
+    daily_preset = DailyPreset.find(params[:daily_preset_id])
+    dates.each do |date|
+      set_daily_preset_to_date(date, daily_preset)
+    end
+    render json: "OK"
+  end
+
+
+  private
+  def set_daily_preset_to_date(date, daily_preset)
+    time_frames = daily_preset.time_frames
+    doctor = daily_preset.doctor
+    speciality = daily_preset.speciality
+    appointments = Appointment.where('DATE(start_time) = ?', Date.new(date[:year], date[:month], date[:day]))
+    count = 0
+    booked_appointments = appointments.booked.length
+    confirmed_appointments = appointments.confirmed.length
+    if booked_appointments != 0 or confirmed_appointments !=0
+      return "ERROR"
+    else
+      appointments.destroy_all
+      time_frames.each do |time_frame|
+        start_at = DateTime.new(date[:year], date[:month], date[:day], time_frame.start_time.hour, time_frame.start_time.min, time_frame.start_time.sec, Rational(-3, 24))
+        end_time = DateTime.new(date[:year], date[:month], date[:day], time_frame.end_time.hour, time_frame.end_time.min, time_frame.end_time.sec, Rational(-3, 24))
+        current_time = start_at
+        while current_time + 30.minutes <= end_time
+          appointment = doctor.appointments.create(start_time: current_time, end_time: current_time + 30.minutes, doctor_name: doctor.name + ' ' + doctor.last_name, speciality_name: speciality.name)
+          count += 1
+          current_time += 30.minutes
+        end
+      end
+    end
+    return count
+  end
+
 
   # # PATCH/PUT /appointments/1
   # def update
@@ -85,12 +133,18 @@ class AppointmentsController < ApplicationController
                     when 'booked'
                       appointment.cancelled!
                     when 'available'
+                      appointment.update(status:1)
+    end
+
+    render json: appointment
+  end
                       appointment.booked!
                       appointment.update(patient_id: patientId)
                       appointment.update(patient_name: patientName)
                     end
   render json: appointment
 end
+
   # # DELETE /appointments/1
   # def destroy
   #   @appointment.destroy
