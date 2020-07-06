@@ -3,9 +3,7 @@ class DailyPresetsController < ApplicationController
 
   # GET /daily_presets
   def index
-    @daily_presets = DailyPreset.all
-
-    render json: @daily_presets
+    render json: Doctor.find(params[:doctor_id]).daily_presets
   end
 
   # GET /daily_presets/1
@@ -15,9 +13,10 @@ class DailyPresetsController < ApplicationController
 
   # POST /daily_presets
   def create
-    @daily_preset = DailyPreset.new(daily_preset_params)
-
+    @daily_preset = DailyPreset.new(name: params[:name] , speciality_id: params[:speciality_id], doctor_id: params[:doctor_id])
+    print params[:time_frames]
     if @daily_preset.save
+      params[:time_frames].each { |tf|  @daily_preset.time_frames.create(start_time: tf[:start_time]  , end_time: tf[:end_time]  ) }
       render json: @daily_preset, status: :created, location: @daily_preset
     else
       render json: @daily_preset.errors, status: :unprocessable_entity

@@ -3,4 +3,5 @@ class DailyPreset < ApplicationRecord
   belongs_to :doctor
   has_many :weekly_preset_daily_presets
   has_many :weekly_presets, through: :weekly_preset_daily_presets
+  has_many :time_frames, dependent: :destroy
 end
